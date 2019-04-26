@@ -1,4 +1,4 @@
-package kademplia_simulator;
+package kademlia_simulator;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -50,7 +50,7 @@ public final class Coordinator implements Runnable {
      */
     public Coordinator(final int m, final int n, final int k) {
         if(!(n > 0 && m > 0 && k > 0))
-            throw new IllegalArgumentException("n, m, k must be bigger than 0.");
+            throw new IllegalArgumentException("m, n, k must be bigger than 0.");
 
         if(m > 256)
             throw new IllegalArgumentException("m must not be bigger than 256.");

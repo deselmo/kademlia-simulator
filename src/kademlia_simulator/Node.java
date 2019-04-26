@@ -1,4 +1,4 @@
-package kademplia_simulator;
+package kademlia_simulator;
 
 import java.util.Collection;
 import java.util.HashMap;
