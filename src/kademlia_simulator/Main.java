@@ -15,12 +15,8 @@ public class Main {
 
     public static void main(String[] args) throws FileNotFoundException {
 
-        if(args.length < 3 && args.length > 4) {
-
-            System.out.println(infoMessage.toString());
-
-            System.exit(1);
-        }
+        if(args.length < 3 || args.length > 4)
+            Main.exitWithUsage("Invalid number of arguments.");
 
         int m = 0;
         int n = 0;
@@ -37,12 +33,13 @@ public class Main {
                 num = Integer.parseInt(args[3]);
 
         } catch(NumberFormatException exception) {
-            System.exit(1);
+            Main.exitWithUsage("Invalid number format.");
         }
 
-        // m = 256;
-        // n = 2000;
-        // k = 20;
+        if(num < 1)
+            Main.exitWithUsage("num must be bigger than 0.");
+
+        //TODO create out folder
 
         for(int i = 0; i < num; i++) {
 
@@ -52,24 +49,38 @@ public class Main {
             try {
                 coordinator = new Coordinator(m, n, k);
             } catch(IllegalArgumentException exception) {
-                System.out.println(exception.getMessage());
-                System.exit(1);
+                Main.exitWithUsage(exception.getMessage());
             }
 
             coordinator.run();
             String networkGML = coordinator.getNetworkInGML();
 
-            String outputPath = "out/m"+m+"_n"+n+"_k"+k+"__"+num+".gml";
+            String outputPath = "out/m" + m + "_n" + n + "_k" + k + "__"+ (i+1) +".gml";
             
             try(PrintWriter out = new PrintWriter(outputPath)) {
                 out.println(networkGML);
+            } catch(FileNotFoundException | SecurityException exception) {
+                System.out.println(exception.getMessage());
+                continue;
             }
     
             long endTime = System.nanoTime();
     
-            System.out.println("outputPath: " + 
+            System.out.println(outputPath + ": " + 
                     ((endTime - startTime) / 1000000000) + " seconds");
             
         }
+
+        System.exit(0);
+    }
+
+    static private void exitWithUsage() {
+        System.out.println(infoMessage);
+        System.exit(1);
+    }
+
+    static private void exitWithUsage(String message) {
+        System.out.println(message + "\n");
+        Main.exitWithUsage();
     }
 }
