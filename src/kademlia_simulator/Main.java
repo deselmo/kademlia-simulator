@@ -9,6 +9,13 @@ import java.io.PrintWriter;
  * entry point to use the simulator.
  */
 public final class Main {
+
+    /**
+     * Name of the output directory;
+     */
+    private static String outputDirName = "out";
+
+
     /**
      * String containing the usage info of the simulator
      */
@@ -20,12 +27,6 @@ public final class Main {
         "k: the number k of size of the routing table buckets, k>0;\n" +
         "num: the number of outputs to produce, it is an optional number, the default value is 1;\n" +
         "The results are saved in the \"" + Main.outputDirName + "\" folder.";
-
-    /**
-     * Name of the output directory;
-     */
-    private static String outputDirName = "out";
-
 
     /**
      * 
