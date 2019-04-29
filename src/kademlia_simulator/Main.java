@@ -33,6 +33,7 @@ public final class Main {
      * @param args  array of argouments, to be used as explained in the infoMessae
      */
     public static final void main(final String[] args) {
+        if(args == null) throw new NullPointerException();
 
         if(args.length < 3 || args.length > 4)
             Main.exitWithUsage("Invalid number of arguments.");
@@ -131,6 +132,8 @@ public final class Main {
      * @param message  to print before the program closes
      */
     static final private void exitWithUsage(final String message) {
+        if(message == null) throw new NullPointerException();
+
         System.out.println(message + "\n");
         Main.exitWithUsage();
     }
@@ -143,6 +146,8 @@ public final class Main {
      * @return  the seconds needed to execute the runnable
      */
     static private final long runWithElapsedTimeInSeconds(final Runnable runnable) {
+        if(runnable == null) throw new NullPointerException();
+
         final long startTime = System.nanoTime();
         runnable.run();
         final long endTime = System.nanoTime();
