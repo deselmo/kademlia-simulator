@@ -13,7 +13,7 @@ public final class Main {
     /**
      * Name of the output directory;
      */
-    private static String outputDirName = "out";
+    private static final String outputDirName = "out";
 
 
     /**
@@ -32,7 +32,7 @@ public final class Main {
      * 
      * @param args  array of argouments, to be used as explained in the infoMessae
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
 
         if(args.length < 3 || args.length > 4)
             Main.exitWithUsage("Invalid number of arguments.");
@@ -117,7 +117,7 @@ public final class Main {
         System.exit(1);
     }
 
-    static private void exitWithUsage(String message) {
+    static private void exitWithUsage(final String message) {
         System.out.println(message + "\n");
         Main.exitWithUsage();
     }
@@ -129,7 +129,7 @@ public final class Main {
      * @param runnable  Runnable to be executed
      * @return  the seconds needed to execute the runnable
      */
-    static private long runWithElapsedTimeInSeconds(Runnable runnable) {
+    static private long runWithElapsedTimeInSeconds(final Runnable runnable) {
         long startTime = System.nanoTime();
         runnable.run();
         long endTime = System.nanoTime();
