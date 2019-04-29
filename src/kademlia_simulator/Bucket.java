@@ -21,12 +21,14 @@ public final class Bucket {
 
     /**
      * Consructs a new Bucket.
+     * k must be bigger than 0
      * 
      * @param k  the size of this bucket
+     * @throws IllegalArgumentException  if !(k > 0)
      */
     public Bucket(long k) {
         if(!(k > 0))
-            throw new IllegalArgumentException("Bucket size must be bigger than 0");
+            throw new IllegalArgumentException("k must be bigger than 0");
 
         this.k = k;
         this.nodes = new LinkedList<>();
