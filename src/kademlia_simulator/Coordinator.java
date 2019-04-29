@@ -8,24 +8,28 @@ import java.util.Set;
 /**
  * Coordinator class represnts a a centralized coordinator which manages
  * virtual nodes of a Kademlia network.
+ * A Coordinator object contains no node until it is not run.
  */
 public final class Coordinator implements Runnable {
 
+    /**
+     * Percentage of node to be generated at random for each bucket in the 
+     * routing_table_construction_phase.
+     */
     private static final double percentageOfNodesPerBucket = 0.1;
-    private static final double MAX_ATTEMPTS = 1000000;
 
     /**
-     * number of nodes that will join the network
+     * Number of nodes that will join the network.
      */
     private final int m;
 
     /**
-     * number of bits of the identifiers of the network
+     * Number of bits of the identifiers of the network.
      */
     private final int n;
 
     /**
-     * number of size of the routing table buckets
+     * Number of size of the routing table buckets.
      */
     private final int k;
 
@@ -67,6 +71,9 @@ public final class Coordinator implements Runnable {
     }
 
 
+    /**
+     * Runs the initialization_phase and the routing_table_construction_phase.
+     */
     @Override
     public void run() {
         initialization_phase();
@@ -74,6 +81,9 @@ public final class Coordinator implements Runnable {
     }
 
 
+    /**
+     * Clears the network contained by this and adds a bootstrap node to the network.
+     */
     private void initialization_phase() {
         this.network.clear();
 
@@ -81,8 +91,19 @@ public final class Coordinator implements Runnable {
     }
 
 
+    /**
+     * Generates the remaining nodes to reach n.
+     * Each node is generated with a random identifier.
+     * For each node is generated a radom set of identifier distribuited on
+     * its buckets.
+     * Adds all the generated nodes to the networks.
+     */
     private void routing_table_construction_phase() {
-        int count = 0;
+        if(this.network.size() < 1)
+            throw new RuntimeException(
+                "routing_table_construction_phase" + 
+                "must to be called after initialization_phase");
+
 
         while(this.network.size() != this.n) {
 
@@ -91,23 +112,17 @@ public final class Coordinator implements Runnable {
             Set<Identifier> pairedRandomIdentifier =
                 generatePairedRandomIdentifier(randomNode);
 
-            boolean joined = this.network.join(randomNode, pairedRandomIdentifier);
-
-
-            // Using and truncating the sha, there is no guarantee that all
-            // possible values for identifiers will be generated;
-            // after MAX_ATTEMPTS fails a RuntimeException is throw.
-            if(!joined) {
-                count++;
-                if(count > MAX_ATTEMPTS) {
-                    throw new RuntimeException("Too many attempts to "+
-                        "generate the network, try increasing m");
-                }
-            }
+            this.network.join(randomNode, pairedRandomIdentifier);
         }
     }
 
 
+    /**
+     * Generates a node with a random identifiers in the range of allowed
+     * identifiers.
+     * 
+     * @return  a Node with a random identifier
+     */
     private Node newRandomNode() {
         Identifier identifier = new Identifier(m, this.random);
 
@@ -115,19 +130,33 @@ public final class Coordinator implements Runnable {
     }
 
 
-    private Set<Identifier> generatePairedRandomIdentifier(Node node) {
+    /**
+     * Generates a set of identifiers uniformly distributed, at random, in the
+     * identifiers range paired with the different buckets of the routing
+     * tables of node.
+     * 
+     * For each bucket are generated (this.k * Coordinator.percentageOfNodesPerBucket),
+     * duplicates are dropped.
+     * At least one ID per bucket is generated.
+     * 
+     * @param node  to consider to generate paired identifiers
+     * @return  a set of random identifiers paired with the buckets of node
+     */
+    private Set<Identifier> generatePairedRandomIdentifier(final Node node) {
         Identifier nodeIdentifier = node.getIdentifier();
 
         Set<Identifier> identifiers = new HashSet<>();
 
         for(int i = 0; i < this.m; i++) {
 
+            // generate at least one ID per bucket
             int identifiersToGenerate = 
-                Math.max(1, (int) (this.k * percentageOfNodesPerBucket));
+                Math.max(1, (int) (this.k * Coordinator.percentageOfNodesPerBucket));
 
             // try to generate a fixed percentage of identifiers per bucket
-
             for(int j = 0; j < identifiersToGenerate; j++) {
+
+                // add a random identifier in the i-th bucket of the routing table of node
                 identifiers.add(nodeIdentifier.randomInBucket(i, this.random));
             }
         }
@@ -136,6 +165,14 @@ public final class Coordinator implements Runnable {
     }
 
 
+    /**
+     * Returns the network that this coordinator contains,
+     * if this method is called the run method, the returning network is empty.
+     * The network returned is a String in the GML format.
+     * 
+     * @return  a String representing the current network contained by this
+     *          coordinator, in the GML format.
+     */
     public String getNetworkInGML() {
         return network.toGML();
     }
