@@ -44,7 +44,7 @@ public final class Bucket {
      * 
      * @param node  the specified node to be inserted in the bucket
      */
-    public void insert(Node node) {
+    public final void insert(final Node node) {
         if(node == null) throw new NullPointerException();
 
         // if the node is present (and if so removed) or the bucked is not full,
@@ -62,7 +62,7 @@ public final class Bucket {
 
         // the least recently seen node shold be removed of promoted to the tail
         // anyway it is removed from its current position
-        Node leastRecentlySeenNode = this.nodes.remove(0);
+        final Node leastRecentlySeenNode = this.nodes.remove(0);
 
         // if th ping is successful, the node is still alive
         if(Node.tryPing(leastRecentlySeenNode)) {
@@ -80,7 +80,7 @@ public final class Bucket {
     }
 
 
-    public List<Node> getNodes() {
+    public final List<Node> getNodes() {
         return new ArrayList<Node>(this.nodes);
     }
 }
