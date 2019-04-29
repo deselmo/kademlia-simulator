@@ -25,7 +25,7 @@ public final class Bucket {
      * @param k  the size of this bucket
      */
     public Bucket(long k) {
-        if(k == 0)
+        if(!(k > 0))
             throw new IllegalArgumentException("Bucket size must be bigger than 0");
 
         this.k = k;
