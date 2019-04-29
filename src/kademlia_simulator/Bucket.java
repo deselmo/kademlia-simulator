@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Butket
+ * Butket class representing a bucket in a kademlia network.
  */
 public final class Bucket {
     /**
