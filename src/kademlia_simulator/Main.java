@@ -32,37 +32,38 @@ public final class Main {
      * 
      * @param args  array of argouments, to be used as explained in the infoMessae
      */
-    public static void main(final String[] args) {
+    public static final void main(final String[] args) {
 
         if(args.length < 3 || args.length > 4)
             Main.exitWithUsage("Invalid number of arguments.");
 
 
-        // number of nodes that will join the network
-        int m = 0;
-
-        // number of bits of the identifiers of the network
-        int n = 0;
-
-        // number of size of the routing table buckets
-        int k = 0;
+        int m_ = 0;
+        int n_ = 0;
+        int k_ = 0;
 
         // number of networks to create
-        int num = 1;
+        int num_ = 1;
 
 
         // get parametres from args
         try {
-            m = Integer.parseInt(args[0]);
-            n = Integer.parseInt(args[1]);
-            k = Integer.parseInt(args[2]);
+            m_ = Integer.parseInt(args[0]);
+            n_ = Integer.parseInt(args[1]);
+            k_ = Integer.parseInt(args[2]);
 
             if(args.length > 3)
-                num = Integer.parseInt(args[3]);
+                num_ = Integer.parseInt(args[3]);
 
         } catch(NumberFormatException exception) {
             Main.exitWithUsage("Invalid number format.");
         }
+
+        // final value of parameters
+        final int m = m_;
+        final int n = n_;
+        final int k = k_;
+        final int num = num_;
 
         if(num < 1)
             Main.exitWithUsage("num must be bigger than 0.");
@@ -74,26 +75,28 @@ public final class Main {
         for(int i = 0; i < num; i++) {
     
             // create the coordintor data structure
-            Coordinator coordinator = null;
+            Coordinator coordinator_ = null;
             try {
-                coordinator = new Coordinator(m, n, k);
+                coordinator_ = new Coordinator(m, n, k);
             } catch(IllegalArgumentException exception) {
                 Main.exitWithUsage(exception.getMessage());
             }
 
+            final Coordinator coordinator = coordinator_;
+
             // run the coordinator and calculate the time in seconds to create
             // the network
-            long elapsedTime = Main.runWithElapsedTimeInSeconds(coordinator);
+            final long elapsedTime = Main.runWithElapsedTimeInSeconds(coordinator);
 
 
-            String networkGML = coordinator.getNetworkInGML();
+            final String networkGML = coordinator.getNetworkInGML();
 
 
-            String outputPath = Main.outputDirName + File.separator + 
+            final String outputPath = Main.outputDirName + File.separator + 
                     "m" + m + "_n" + n + "_k" + k + "__"+ (i+1) +".gml";
 
             // write the network in GML format into a file
-            try(PrintWriter out = new PrintWriter(outputPath)) {
+            try(final PrintWriter out = new PrintWriter(outputPath)) {
 
                 out.println(networkGML);
 
@@ -116,7 +119,7 @@ public final class Main {
     /**
      * Prints the usage and close the program with error.
      */
-    static private void exitWithUsage() {
+    static final private void exitWithUsage() {
         System.out.println(infoMessage);
         System.exit(1);
     }
@@ -127,7 +130,7 @@ public final class Main {
      * 
      * @param message  to print before the program closes
      */
-    static private void exitWithUsage(final String message) {
+    static final private void exitWithUsage(final String message) {
         System.out.println(message + "\n");
         Main.exitWithUsage();
     }
@@ -139,10 +142,10 @@ public final class Main {
      * @param runnable  Runnable to be executed
      * @return  the seconds needed to execute the runnable
      */
-    static private long runWithElapsedTimeInSeconds(final Runnable runnable) {
-        long startTime = System.nanoTime();
+    static private final long runWithElapsedTimeInSeconds(final Runnable runnable) {
+        final long startTime = System.nanoTime();
         runnable.run();
-        long endTime = System.nanoTime();
+        final long endTime = System.nanoTime();
     
         return (endTime - startTime) / 1000000000;
     }
