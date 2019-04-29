@@ -7,7 +7,7 @@ import java.util.Set;
 
 /**
  * Coordinator class representing a centralized coordinator which manages
- * virtual nodes of a Kademlia network.
+ * virtual nodes of kademlia.
  * A Coordinator object contains no node until it is not run.
  */
 public final class Coordinator implements Runnable {
