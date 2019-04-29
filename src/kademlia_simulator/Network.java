@@ -9,19 +9,25 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- * Network
+ * Network class, this is an auxiliary class for Coordinator.
+ * 
+ * This class keeps track of all the nodes connected to the network.
+ * It contains the logic to join new nodes in the netowrk.
+ * With this class is possible in constant time to:
+ * - check if a node is already in the network;
+ * - get a random node in the network.
  */
 public final class Network {
 
     /**
-     * The list of nodes,
-     * used to extract a random node in constant time.
+     * List of nodes joined to this network,
+     * used to extract, in constant time, a random node.
      */
     private final List<Node> nodeList;
 
     /**
-     * The map to the nodes that joined this network,
-     * used to get nodes in constant time from their identifier.
+     * Set of nodes joined to this network,
+     * used to check, in constant time, if a node is already in the network.
      */
     private final Set<Node> nodeSet;
 
@@ -31,14 +37,23 @@ public final class Network {
     /**
      * Constructs a Network.
      */
-    public Network(Random random) {
+    public Network(final Random random) {
+        if(random == null) throw new NullPointerException();
+
         this.nodeList = new ArrayList<>();
         this.nodeSet = new HashSet<>();
         this.random = random;
     }
 
 
-    private boolean addNode(Node node) {
+    /**
+     * Add the specified node in the data structure of this network.
+     * 
+     * @param node  to add to the network
+     * @return  {@code false} if a node with the same identifier is already in 
+     *          the network
+     */
+    private final boolean addNode(final Node node) {
         if(node == null) throw new NullPointerException();
 
         if (this.contains(node))
@@ -54,27 +69,35 @@ public final class Network {
     /**
      * Join the specified node to this network.
      * 
-     * @param node  node whose is joining to this network
-     * @return {@code false} if there is no nodes to join
-     * @throws NullPointerException if the specified node is null
+     * @param node  whose is joining to this network
+     * @return  {@code false} if a node with the same identifier is already in 
+     *          the network
      */
-    public boolean join(Node node) {
+    public final boolean join(final Node node) {
         if(node == null) throw new NullPointerException();
 
         return this.addNode(node);
     }
 
 
-    public boolean join(Node node, Set<Identifier> identifiersToFind) {
-        if(node == null) throw new NullPointerException();
+    /**
+     * Join the specified node to this network, then call the lookup
+     * on the specified node for each identifiers in identifiersToFind.
+     * 
+     * @param node  whose is joining to this network
+     * @param identifiersToFind  to search after node joined this network
+     * @return  {@code false} if a node with the same identifier is already in 
+     *          the network
+     */
+    public final boolean join(final Node node, final Set<Identifier> identifiersToFind) {
+        if(node == null || identifiersToFind == null) throw new NullPointerException();
 
         if(this.contains(node))
             return false;
 
-        Node bootstrapNode = this.getRandomNode();
+        final Node bootstrapNode = this.getRandomNode();
 
         this.addNode(node);
-
 
         for(Identifier identifier : identifiersToFind) {
             node.lookup(bootstrapNode, identifier);
@@ -85,21 +108,23 @@ public final class Network {
 
 
     /**
-     *
-     * @return the number of nodes in this list
+     * Returns the the number of nodes in this network.
+     * 
+     * @return  the number of nodes in this network
      */
-    public int size() {
+    public final int size() {
         return this.nodeList.size();
     }
 
 
     /**
+     * Returns {@code true} if this network contains the specified node.
      * 
      * @param node  node whose presence in this network is to be tested
      * @return  {@code true} if this network contains the specified node
      * @throws NullPointerException if the specified node is null
      */
-    public boolean contains(Node node) {
+    public final boolean contains(final Node node) {
         if(node == null) throw new NullPointerException();
 
         return this.nodeSet.contains(node);
@@ -109,39 +134,58 @@ public final class Network {
     /**
      * Removes all the nodes from this network.
      */
-    public void clear() {
+    public final void clear() {
         this.nodeList.clear();
         this.nodeSet.clear();
     }
 
 
     /**
+     * Returns a random node in this network.
      * 
      * @return  a random node in this network,
      *          or {@null null} if this network contains no nodes.
      */
-    private Node getRandomNode() {
+    private final Node getRandomNode() {
         if(this.size() == 0) return null;
 
         return this.nodeList.get((int) (this.random.nextDouble() * this.size()));
     }
 
 
-    public List<Node> getNodes() {
+    /**
+     * Returns a list of all the nodes contained to this network.
+     * 
+     * @return  a list of all the nodes contained to this network
+     */
+    public final List<Node> getNodes() {
         return new ArrayList<>(this.nodeList);
     }
 
 
-    public String toGML() {
-        List<Node> nodes = this.getNodes();
-        Map<Node, Integer> mapID = new HashMap<>();
+    /**
+     * Returns a String representing this network in GML format.
+     * 
+     * For reasons of compatibility, an incremental number was used instead of
+     * the original ID;
+     * the original ID is contained in the comment of the node.
+     * 
+     * @return  the netowork representation in GML format
+     */
+    public final String toGML() {
+        final List<Node> nodes = this.getNodes();
 
-        StringBuilder sb = new StringBuilder();
+        // map to save the link between incremental and original ID
+        final Map<Node, Integer> mapID = new HashMap<>();
+
+        final StringBuilder sb = new StringBuilder();
+
         sb.append("graph\n");
         sb.append("[\n");
 
+        // print all the nodes
         for(int i = 0; i < nodes.size(); i++) {
-            Node node = nodes.get(i);
+            final Node node = nodes.get(i);
 
             mapID.put(node, i);
 
@@ -161,6 +205,7 @@ public final class Network {
             sb.append("  ]\n");
         }
 
+        // print all the edges
         for(Node node : nodes) {
             for(Node target : node.getKnownNodes()) {
                 sb.append("  edge\n");
@@ -193,8 +238,13 @@ public final class Network {
     }
 
 
+    /**
+     * The GML format is used to represent the network.
+     * 
+     * @return  a String representation of this object
+     */
     @Override
-    public String toString() {
+    public final String toString() {
         return this.toGML();
     }
 }
