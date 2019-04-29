@@ -11,13 +11,13 @@ import java.io.PrintWriter;
 public final class Main {
 
     /**
-     * Name of the output directory;
+     * Name of the output directory.
      */
     private static final String outputDirName = "out";
 
 
     /**
-     * String containing the usage info of the simulator
+     * String containing the usage info of the simulator.
      */
     static private final String infoMessage =
         "kademlia_simulator 1.0 ( William Guglielmo )\n" +
@@ -112,11 +112,21 @@ public final class Main {
         System.exit(0);
     }
 
+
+    /**
+     * Prints the usage and close the program with error.
+     */
     static private void exitWithUsage() {
         System.out.println(infoMessage);
         System.exit(1);
     }
 
+
+    /**
+     * Prints message, then the usage and close the program with error.
+     * 
+     * @param message  to print before the program closes
+     */
     static private void exitWithUsage(final String message) {
         System.out.println(message + "\n");
         Main.exitWithUsage();
@@ -124,7 +134,7 @@ public final class Main {
 
     /**
      * Runs the specified runnable and returns how many seconds were needed to
-     * complete the execution
+     * complete the execution.
      * 
      * @param runnable  Runnable to be executed
      * @return  the seconds needed to execute the runnable
