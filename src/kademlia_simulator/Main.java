@@ -5,8 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 /**
- * Main class, contains the main method;
- * entry point to use the simulator.
+ * Main class.
+ * Entry point to use the simulator.
  */
 public final class Main {
 
