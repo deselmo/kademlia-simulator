@@ -6,7 +6,7 @@ import java.util.Set;
 
 
 /**
- * Coordinator class represnts a a centralized coordinator which manages
+ * Coordinator class represnts a centralized coordinator which manages
  * virtual nodes of a Kademlia network.
  * A Coordinator object contains no node until it is not run.
  */
