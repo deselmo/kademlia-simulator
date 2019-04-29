@@ -47,6 +47,7 @@ public final class Coordinator implements Runnable {
 
     /**
      * Constructs a Coordinator.
+     * 
      * m, n, k must be bigger than 0;
      * m must not be bigger than 256;
      * 2**m must be bigger than or equal to n.
