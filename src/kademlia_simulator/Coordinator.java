@@ -13,10 +13,10 @@ import java.util.Set;
 public final class Coordinator implements Runnable {
 
     /**
-     * Percentage of node to be generated at random for each bucket in the 
+     * Percentage of node to be generated at random for each bucket in the
      * routing_table_construction_phase.
      */
-    private static final double percentageOfNodesPerBucket = 0.1;
+    private static final double percentageOfNodesPerBucket = 0.1; //10%
 
     /**
      * Number of nodes that will join the network.
@@ -143,6 +143,8 @@ public final class Coordinator implements Runnable {
      * @return  a set of random identifiers paired with the buckets of node
      */
     private final Set<Identifier> generatePairedRandomIdentifier(final Node node) {
+        if(node == null) throw new NullPointerException();
+
         final Identifier nodeIdentifier = node.getIdentifier();
 
         final Set<Identifier> identifiers = new HashSet<>();
