@@ -21,6 +21,7 @@ public final class Bucket {
 
     /**
      * Consructs a new Bucket.
+     * 
      * k must be bigger than 0
      * 
      * @param k  the size of this bucket
