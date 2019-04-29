@@ -47,10 +47,18 @@ public final class Coordinator implements Runnable {
 
     /**
      * Constructs a Coordinator.
+     * m, n, k must be bigger than 0;
+     * m must not be bigger than 256;
+     * 2**m must be bigger than or equal to n.
      * 
      * @param m  the number m of bits of the identifiers of the network
      * @param n  the number n of nodes that will join the network
      * @param k  the number k of size of the routing table buckets
+     * @throws IllegalArgumentException  if !(m > 0) or
+     *                                      !(n > 0) or
+     *                                      !(k > 0) or
+     *                                      m > 256  or
+     *                                      2**m > n
      */
     public Coordinator(final int m, final int n, final int k) {
         if(!(n > 0 && m > 0 && k > 0))
