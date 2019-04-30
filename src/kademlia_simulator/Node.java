@@ -276,9 +276,9 @@ public final class Node {
 
 
     /**
-     * Two nodes are considered equal if they have the same identifier.
+     * Two nodes have the same hashCode if they have the same identifier.
      * 
-     * @return  the  hashCode of the identifier of this node
+     * @return  the hashCode of the identifier of this node
      */
     @Override
     public final int hashCode() {
