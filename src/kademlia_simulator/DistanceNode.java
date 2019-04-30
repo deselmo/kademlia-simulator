@@ -37,6 +37,8 @@ public final class DistanceNode implements Comparable<DistanceNode> {
      * @param target  specified target
      */
     public DistanceNode(final Node node, final Identifier target) {
+        if(node == null || target == null) throw new NullPointerException();
+
         this.node = node;
         this.target = target;
         this.distance = node.getIdentifier().distance(target);
@@ -54,7 +56,10 @@ public final class DistanceNode implements Comparable<DistanceNode> {
     public static final List<DistanceNode> listFromNodeToDistanceNode(
                                                 final List<Node> nodes,
                                                 final Identifier target) {
-        List <DistanceNode> distanceNodes = new ArrayList<>();
+
+        if(nodes == null || target == null) throw new NullPointerException();
+
+        final List <DistanceNode> distanceNodes = new ArrayList<>();
 
         for(Node node : nodes)
             distanceNodes.add(new DistanceNode(node, target));
@@ -71,7 +76,10 @@ public final class DistanceNode implements Comparable<DistanceNode> {
      */
     public static final List<Node> listFromDistanceNodeToNode(
                                         final List<DistanceNode> distanceNodes) {
-        List <Node> nodes = new ArrayList<>();
+
+        if(distanceNodes == null) throw new NullPointerException();
+
+        final List <Node> nodes = new ArrayList<>();
 
         for(DistanceNode distanceNode : distanceNodes)
             nodes.add(distanceNode.getNode());
@@ -118,6 +126,8 @@ public final class DistanceNode implements Comparable<DistanceNode> {
      */
     @Override
     public final int compareTo(final DistanceNode other) {
+        if(other == null) throw new NullPointerException();
+
         if(other.target != this.target)
             throw new IllegalArgumentException("the two nodes must have the same target");
 
