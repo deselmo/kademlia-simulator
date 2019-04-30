@@ -76,7 +76,7 @@ public final class Coordinator implements Runnable {
         this.k = k;
 
         this.random = new Random();
-        this.network = new Network(this.random);
+        this.network = new Network(this.random, m);
     }
 
 

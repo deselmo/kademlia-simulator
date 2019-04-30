@@ -31,18 +31,20 @@ public final class Network {
      */
     private final Set<Node> nodeSet;
 
+    private final int m;
     private final Random random;
 
 
     /**
      * Constructs a Network.
      */
-    public Network(final Random random) {
+    public Network(final Random random, final int m) {
         if(random == null) throw new NullPointerException();
 
         this.nodeList = new ArrayList<>();
         this.nodeSet = new HashSet<>();
         this.random = random;
+        this.m = m;
     }
 
 
@@ -178,10 +180,15 @@ public final class Network {
         // map to save the link between incremental and original ID
         final Map<Node, Integer> mapID = new HashMap<>();
 
+        int max_id_len = Integer.toString((int) Math.pow(2, this.m)).length();
+
         final StringBuilder sb = new StringBuilder();
 
         sb.append("graph\n");
         sb.append("[\n");
+
+        // the graph is derected
+        sb.append("  directed 1\n");
 
         // print all the nodes
         for(int i = 0; i < nodes.size(); i++) {
@@ -194,6 +201,17 @@ public final class Network {
 
             sb.append("    id ");
             sb.append(i);
+            sb.append("\n");
+
+            sb.append("    label ");
+            sb.append("\"");
+
+            String label = Integer.toString(i);
+            while(label.length() < max_id_len) {
+                label = "0" + label;
+            }
+            sb.append(label);
+            sb.append("\"");
             sb.append("\n");
 
             sb.append("    comment ");
