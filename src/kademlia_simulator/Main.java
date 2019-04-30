@@ -39,32 +39,26 @@ public final class Main {
             Main.exitWithUsage("Invalid number of arguments.");
 
 
-        int m_ = 0;
-        int n_ = 0;
-        int k_ = 0;
+        final int m;
+        final int n;
+        final int k;
 
         // number of networks to create
-        int num_ = 1;
+        final int num;
 
 
         // get parametres from args
         try {
-            m_ = Integer.parseInt(args[0]);
-            n_ = Integer.parseInt(args[1]);
-            k_ = Integer.parseInt(args[2]);
+            m = Integer.parseInt(args[0]);
+            n = Integer.parseInt(args[1]);
+            k = Integer.parseInt(args[2]);
 
-            if(args.length > 3)
-                num_ = Integer.parseInt(args[3]);
+            num = (args.length > 3) ? Integer.parseInt(args[3]) : 1;
 
         } catch(NumberFormatException exception) {
             Main.exitWithUsage("Invalid number format.");
+            return;
         }
-
-        // final value of parameters
-        final int m = m_;
-        final int n = n_;
-        final int k = k_;
-        final int num = num_;
 
         if(num < 1)
             Main.exitWithUsage("num must be bigger than 0.");
@@ -76,14 +70,13 @@ public final class Main {
         for(int i = 0; i < num; i++) {
     
             // create the coordintor data structure
-            Coordinator coordinator_ = null;
+            final Coordinator coordinator;
             try {
-                coordinator_ = new Coordinator(m, n, k);
+                coordinator = new Coordinator(m, n, k);
             } catch(IllegalArgumentException exception) {
                 Main.exitWithUsage(exception.getMessage());
+                return;
             }
-
-            final Coordinator coordinator = coordinator_;
 
             // run the coordinator and calculate the time in seconds to create
             // the network
@@ -92,9 +85,11 @@ public final class Main {
 
             final String networkGML = coordinator.getNetworkInGML();
 
+            final String numString = (i==0) ? "" : ("_" + i);
 
             final String outputPath = Main.outputDirName + File.separator + 
-                    "m" + m + "_n" + n + "_k" + k + "__"+ (i+1) +".gml";
+                        "m" + m + "_n" + n + "_k" + k + numString +".gml";
+
 
             // write the network in GML format into a file
             try(final PrintWriter out = new PrintWriter(outputPath)) {
